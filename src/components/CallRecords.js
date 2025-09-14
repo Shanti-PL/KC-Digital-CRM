@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export default function CallRecords({ customerId, isVisible = false }) {
   const [callRecords, setCallRecords] = useState([]);
@@ -13,7 +13,7 @@ export default function CallRecords({ customerId, isVisible = false }) {
   const [deleteConfirm, setDeleteConfirm] = useState(null);
 
   // Fetch call records
-  const fetchCallRecords = async () => {
+  const fetchCallRecords = useCallback(async () => {
     if (!customerId) return;
 
     try {
@@ -31,14 +31,14 @@ export default function CallRecords({ customerId, isVisible = false }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [customerId]);
 
   // Load call records when component becomes visible
   useEffect(() => {
     if (isVisible && customerId) {
       fetchCallRecords();
     }
-  }, [isVisible, customerId]);
+  }, [isVisible, customerId, fetchCallRecords]);
 
   // Add new call record
   const handleAddCall = async (e) => {

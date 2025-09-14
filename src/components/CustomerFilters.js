@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export default function CustomerFilters({
   customers,
@@ -12,50 +12,61 @@ export default function CustomerFilters({
   const [packageFilter, setPackageFilter] = useState("all"); // all, starter, growth, pro, other, none
 
   // Apply filters and sorting
-  const applyFiltersAndSort = (
-    sortBy = dateSort,
-    interestBy = interestFilter,
-    packageBy = packageFilter
-  ) => {
-    let filtered = [...customers];
+  const applyFiltersAndSort = useCallback(
+    (
+      sortBy = dateSort,
+      interestBy = interestFilter,
+      packageBy = packageFilter
+    ) => {
+      let filtered = [...customers];
 
-    // Filter by interest status
-    if (interestBy === "interested") {
-      filtered = filtered.filter((customer) => customer.interested);
-    } else if (interestBy === "not-interested") {
-      filtered = filtered.filter((customer) => !customer.interested);
-    }
-
-    // Filter by package
-    if (packageBy !== "all") {
-      if (packageBy === "none") {
-        filtered = filtered.filter((customer) => !customer.package);
-      } else if (packageBy === "starter") {
-        filtered = filtered.filter(
-          (customer) => customer.package === "Starter Landing Page"
-        );
-      } else if (packageBy === "growth") {
-        filtered = filtered.filter(
-          (customer) => customer.package === "Growth Landing Page"
-        );
-      } else if (packageBy === "pro") {
-        filtered = filtered.filter(
-          (customer) => customer.package === "Pro Website"
-        );
-      } else if (packageBy === "other") {
-        filtered = filtered.filter((customer) => customer.package === "Other");
+      // Filter by interest status
+      if (interestBy === "interested") {
+        filtered = filtered.filter((customer) => customer.interested);
+      } else if (interestBy === "not-interested") {
+        filtered = filtered.filter((customer) => !customer.interested);
       }
-    }
 
-    // Sort by date
-    if (sortBy === "newest") {
-      filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    } else if (sortBy === "oldest") {
-      filtered.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-    }
+      // Filter by package
+      if (packageBy !== "all") {
+        if (packageBy === "none") {
+          filtered = filtered.filter((customer) => !customer.package);
+        } else if (packageBy === "starter") {
+          filtered = filtered.filter(
+            (customer) => customer.package === "Starter Landing Page"
+          );
+        } else if (packageBy === "growth") {
+          filtered = filtered.filter(
+            (customer) => customer.package === "Growth Landing Page"
+          );
+        } else if (packageBy === "pro") {
+          filtered = filtered.filter(
+            (customer) => customer.package === "Pro Website"
+          );
+        } else if (packageBy === "other") {
+          filtered = filtered.filter(
+            (customer) => customer.package === "Other"
+          );
+        }
+      }
 
-    onFilteredCustomersChange(filtered);
-  };
+      // Sort by date
+      if (sortBy === "newest") {
+        filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      } else if (sortBy === "oldest") {
+        filtered.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      }
+
+      onFilteredCustomersChange(filtered);
+    },
+    [
+      customers,
+      onFilteredCustomersChange,
+      dateSort,
+      interestFilter,
+      packageFilter,
+    ]
+  );
 
   const handleDateSortChange = (value) => {
     setDateSort(value);
@@ -95,7 +106,7 @@ export default function CustomerFilters({
   // Apply initial filter on component mount
   useEffect(() => {
     applyFiltersAndSort();
-  }, [customers]);
+  }, [applyFiltersAndSort]);
 
   return (
     <div className="bg-white shadow-sm rounded-lg p-4 mb-6 border">

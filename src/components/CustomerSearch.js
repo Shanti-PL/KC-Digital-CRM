@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export default function CustomerSearch({
   customers,
@@ -11,61 +11,65 @@ export default function CustomerSearch({
   const [isSearching, setIsSearching] = useState(false);
 
   // Perform search
-  const performSearch = (term) => {
-    if (!term || term.trim() === "") {
-      onSearchResults(null); // Pass null to indicate no search
-      return;
-    }
+  const performSearch = useCallback(
+    (term) => {
+      if (!term || term.trim() === "") {
+        onSearchResults(null); // Pass null to indicate no search
+        return;
+      }
 
-    setIsSearching(true);
-    const searchLower = term.toLowerCase().trim();
+      setIsSearching(true);
+      const searchLower = term.toLowerCase().trim();
 
-    const results = customers.filter((customer) => {
-      // Search in basic information
-      const nameMatch = customer.name?.toLowerCase().includes(searchLower);
-      const businessMatch = customer.businessName
-        ?.toLowerCase()
-        .includes(searchLower);
-      const notesMatch = customer.notes?.toLowerCase().includes(searchLower);
+      const results = customers.filter((customer) => {
+        // Search in basic information
+        const nameMatch = customer.name?.toLowerCase().includes(searchLower);
+        const businessMatch = customer.businessName
+          ?.toLowerCase()
+          .includes(searchLower);
+        const notesMatch = customer.notes?.toLowerCase().includes(searchLower);
 
-      // Search in contact information
-      const phoneMatch = customer.phone?.toLowerCase().includes(searchLower);
-      const emailMatch = customer.email?.toLowerCase().includes(searchLower);
+        // Search in contact information
+        const phoneMatch = customer.phone?.toLowerCase().includes(searchLower);
+        const emailMatch = customer.email?.toLowerCase().includes(searchLower);
 
-      // Search in package information
-      const packageMatch = customer.package
-        ?.toLowerCase()
-        .includes(searchLower);
-      const packagePriceMatch = customer.packagePrice
-        ?.toLowerCase()
-        .includes(searchLower);
+        // Search in package information
+        const packageMatch = customer.package
+          ?.toLowerCase()
+          .includes(searchLower);
+        const packagePriceMatch = customer.packagePrice
+          ?.toLowerCase()
+          .includes(searchLower);
 
-      // Search in interest status
-      const interestMatch = customer.interested
-        ? "interested".includes(searchLower) || "yes".includes(searchLower)
-        : "not interested".includes(searchLower) || "no".includes(searchLower);
+        // Search in interest status
+        const interestMatch = customer.interested
+          ? "interested".includes(searchLower) || "yes".includes(searchLower)
+          : "not interested".includes(searchLower) ||
+            "no".includes(searchLower);
 
-      // Search in call records
-      const callRecordsMatch = customer.callRecords?.some((record) =>
-        record.notes?.toLowerCase().includes(searchLower)
-      );
+        // Search in call records
+        const callRecordsMatch = customer.callRecords?.some((record) =>
+          record.notes?.toLowerCase().includes(searchLower)
+        );
 
-      return (
-        nameMatch ||
-        businessMatch ||
-        notesMatch ||
-        phoneMatch ||
-        emailMatch ||
-        packageMatch ||
-        packagePriceMatch ||
-        interestMatch ||
-        callRecordsMatch
-      );
-    });
+        return (
+          nameMatch ||
+          businessMatch ||
+          notesMatch ||
+          phoneMatch ||
+          emailMatch ||
+          packageMatch ||
+          packagePriceMatch ||
+          interestMatch ||
+          callRecordsMatch
+        );
+      });
 
-    onSearchResults(results);
-    setIsSearching(false);
-  };
+      onSearchResults(results);
+      setIsSearching(false);
+    },
+    [customers, onSearchResults]
+  );
 
   // Debounce search to avoid too many calls
   useEffect(() => {
@@ -74,7 +78,7 @@ export default function CustomerSearch({
     }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [searchTerm, customers]);
+  }, [searchTerm, performSearch]);
 
   const handleClearSearch = () => {
     setSearchTerm("");
@@ -218,7 +222,7 @@ export default function CustomerSearch({
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
-            Searching: "{searchTerm}"
+            Searching: &quot;{searchTerm}&quot;
             <button
               onClick={handleClearSearch}
               className="ml-1 text-blue-600 hover:text-blue-800"
