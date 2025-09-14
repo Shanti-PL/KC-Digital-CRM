@@ -1,0 +1,7 @@
+{
+  "/page": "app/page.js",
+  "/api/customers/route": "app/api/customers/route.js",
+  "/api/admin/verify/route": "app/api/admin/verify/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/api/auth/verify/route": "app/api/auth/verify/route.js"
+}
