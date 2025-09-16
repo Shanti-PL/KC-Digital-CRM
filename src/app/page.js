@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import CustomerList from "@/components/CustomerList";
 import CustomerForm from "@/components/CustomerForm";
 import CustomerFilters from "@/components/CustomerFilters";
 import CustomerSearch from "@/components/CustomerSearch";
 import Pagination from "@/components/Pagination";
+import ExportCSV from "@/components/ExportCSV";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Home() {
@@ -51,20 +52,20 @@ export default function Home() {
   };
 
   // Reset to page 1 when filters change
-  const handleFilteredCustomersChange = (filtered) => {
+  const handleFilteredCustomersChange = useCallback((filtered) => {
     setFilteredCustomers(filtered);
     setSearchResults(null); // Clear search when filtering
     setCurrentPage(1);
-  };
+  }, []);
 
   // Handle search results
-  const handleSearchResults = (results) => {
+  const handleSearchResults = useCallback((results) => {
     setSearchResults(results);
     if (results !== null) {
       setFilteredCustomers([]); // Clear filters when searching
     }
     setCurrentPage(1);
-  };
+  }, []);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -320,6 +321,10 @@ export default function Home() {
                 <p className="text-gray-600 mt-1">
                   Manage your digital marketing clients
                 </p>
+              </div>
+              {/* Export CSV Button */}
+              <div className="flex-shrink-0">
+                <ExportCSV customers={customers} />
               </div>
             </div>
 
