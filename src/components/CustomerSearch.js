@@ -47,6 +47,35 @@ export default function CustomerSearch({
           : "not interested".includes(searchLower) ||
             "no".includes(searchLower);
 
+        // Search in project status
+        const projectStatusMatch = customer.projectStatus
+          ?.toLowerCase()
+          .includes(searchLower);
+
+        // Search in deposit status
+        const depositStatusMatch =
+          customer.depositStatus === "yes"
+            ? "deposit received".includes(searchLower) ||
+              "yes".includes(searchLower) ||
+              "paid".includes(searchLower)
+            : customer.depositStatus === "no"
+            ? "deposit pending".includes(searchLower) ||
+              "no".includes(searchLower) ||
+              "unpaid".includes(searchLower)
+            : false;
+
+        // Search in project paid status
+        const projectPaidMatch =
+          customer.projectPaid === "yes"
+            ? "fully paid".includes(searchLower) ||
+              "paid".includes(searchLower) ||
+              "yes".includes(searchLower)
+            : customer.projectPaid === "no"
+            ? "payment pending".includes(searchLower) ||
+              "unpaid".includes(searchLower) ||
+              "no".includes(searchLower)
+            : false;
+
         // Search in call records
         const callRecordsMatch = customer.callRecords?.some((record) =>
           record.notes?.toLowerCase().includes(searchLower)
@@ -61,6 +90,9 @@ export default function CustomerSearch({
           packageMatch ||
           packagePriceMatch ||
           interestMatch ||
+          projectStatusMatch ||
+          depositStatusMatch ||
+          projectPaidMatch ||
           callRecordsMatch
         );
       });
@@ -105,6 +137,33 @@ export default function CustomerSearch({
       const interestMatch = customer.interested
         ? "interested".includes(searchLower) || "yes".includes(searchLower)
         : "not interested".includes(searchLower) || "no".includes(searchLower);
+
+      const projectStatusMatch = customer.projectStatus
+        ?.toLowerCase()
+        .includes(searchLower);
+
+      const depositStatusMatch =
+        customer.depositStatus === "yes"
+          ? "deposit received".includes(searchLower) ||
+            "yes".includes(searchLower) ||
+            "paid".includes(searchLower)
+          : customer.depositStatus === "no"
+          ? "deposit pending".includes(searchLower) ||
+            "no".includes(searchLower) ||
+            "unpaid".includes(searchLower)
+          : false;
+
+      const projectPaidMatch =
+        customer.projectPaid === "yes"
+          ? "fully paid".includes(searchLower) ||
+            "paid".includes(searchLower) ||
+            "yes".includes(searchLower)
+          : customer.projectPaid === "no"
+          ? "payment pending".includes(searchLower) ||
+            "unpaid".includes(searchLower) ||
+            "no".includes(searchLower)
+          : false;
+
       const callRecordsMatch = customer.callRecords?.some((record) =>
         record.notes?.toLowerCase().includes(searchLower)
       );
@@ -118,6 +177,9 @@ export default function CustomerSearch({
         packageMatch ||
         packagePriceMatch ||
         interestMatch ||
+        projectStatusMatch ||
+        depositStatusMatch ||
+        projectPaidMatch ||
         callRecordsMatch
       );
     }).length;
@@ -147,7 +209,7 @@ export default function CustomerSearch({
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search customers by name, business, email, phone, notes, package, or call records..."
+            placeholder="Search customers by name, business, contact info, package, project status, payment status, notes, or call records..."
             className="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
           {searchTerm && (
@@ -200,7 +262,8 @@ export default function CustomerSearch({
           <div className="text-xs text-gray-500">
             <span className="font-medium">Search includes:</span> Customer name,
             business name, contact info (phone & email), package details,
-            interest status, notes, and call records
+            interest status, project status, payment status (deposit & project
+            paid), notes, and call records
           </div>
         </div>
       )}

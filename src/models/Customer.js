@@ -48,6 +48,21 @@ const CustomerSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  projectStatus: {
+    type: String,
+    enum: ["not start", "designing", "developing", "reviewing", "live", ""],
+    default: "",
+  },
+  depositStatus: {
+    type: String,
+    enum: ["yes", "no", ""],
+    default: "",
+  },
+  projectPaid: {
+    type: String,
+    enum: ["yes", "no", ""],
+    default: "",
+  },
   notes: {
     type: String,
     default: "",

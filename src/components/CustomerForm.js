@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const packages = [
   { value: "", label: "Select a package" },
@@ -36,8 +36,30 @@ export default function CustomerForm({
     interested: customer?.interested || false,
     package: customer?.package || "",
     packagePrice: customer?.packagePrice || "",
+    projectStatus: customer?.projectStatus || "",
+    depositStatus: customer?.depositStatus || "",
+    projectPaid: customer?.projectPaid || "",
     notes: customer?.notes || "",
   });
+
+  // Update form data when customer prop changes (for editing)
+  useEffect(() => {
+    if (customer) {
+      setFormData({
+        name: customer.name || "",
+        businessName: customer.businessName || "",
+        phone: customer.phone || "",
+        email: customer.email || "",
+        interested: customer.interested || false,
+        package: customer.package || "",
+        packagePrice: customer.packagePrice || "",
+        projectStatus: customer.projectStatus || "",
+        depositStatus: customer.depositStatus || "",
+        projectPaid: customer.projectPaid || "",
+        notes: customer.notes || "",
+      });
+    }
+  }, [customer]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -198,6 +220,71 @@ export default function CustomerForm({
           />
         </div>
       )}
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <label
+            htmlFor="projectStatus"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Project Status
+          </label>
+          <select
+            id="projectStatus"
+            name="projectStatus"
+            value={formData.projectStatus}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+          >
+            <option value="">Select status</option>
+            <option value="not start">Not Start</option>
+            <option value="designing">Designing</option>
+            <option value="developing">Developing</option>
+            <option value="reviewing">Reviewing</option>
+            <option value="live">Live</option>
+          </select>
+        </div>
+
+        <div>
+          <label
+            htmlFor="depositStatus"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Deposit Status
+          </label>
+          <select
+            id="depositStatus"
+            name="depositStatus"
+            value={formData.depositStatus}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+          >
+            <option value="">Select status</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+
+        <div>
+          <label
+            htmlFor="projectPaid"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Project Paid
+          </label>
+          <select
+            id="projectPaid"
+            name="projectPaid"
+            value={formData.projectPaid}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900"
+          >
+            <option value="">Select status</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
 
       <div>
         <label

@@ -96,6 +96,12 @@ export default function CustomerList({
                   Package
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Project Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Payment
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Date Added
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -199,6 +205,61 @@ export default function CustomerList({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {getPackageDisplay(customer)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        customer.projectStatus === "live"
+                          ? "bg-green-100 text-green-800"
+                          : customer.projectStatus === "developing"
+                          ? "bg-blue-100 text-blue-800"
+                          : customer.projectStatus === "designing"
+                          ? "bg-purple-100 text-purple-800"
+                          : customer.projectStatus === "reviewing"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : customer.projectStatus === "not start"
+                          ? "bg-gray-100 text-gray-800"
+                          : "bg-gray-50 text-gray-500"
+                      }`}
+                    >
+                      {customer.projectStatus || "Not Set"}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <div className="space-y-1">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-xs font-medium text-gray-500">
+                          Deposit:
+                        </span>
+                        <span
+                          className={`inline-flex px-1.5 py-0.5 text-xs font-medium rounded ${
+                            customer.depositStatus === "yes"
+                              ? "bg-green-100 text-green-700"
+                              : customer.depositStatus === "no"
+                              ? "bg-red-100 text-red-700"
+                              : "bg-gray-100 text-gray-500"
+                          }`}
+                        >
+                          {customer.depositStatus || "N/A"}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-xs font-medium text-gray-500">
+                          Paid:
+                        </span>
+                        <span
+                          className={`inline-flex px-1.5 py-0.5 text-xs font-medium rounded ${
+                            customer.projectPaid === "yes"
+                              ? "bg-green-100 text-green-700"
+                              : customer.projectPaid === "no"
+                              ? "bg-red-100 text-red-700"
+                              : "bg-gray-100 text-gray-500"
+                          }`}
+                        >
+                          {customer.projectPaid || "N/A"}
+                        </span>
+                      </div>
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {formatDate(customer.createdAt)}

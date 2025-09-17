@@ -13,6 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 export default function Home() {
   const [customers, setCustomers] = useState([]);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
+  const [hasActiveFilters, setHasActiveFilters] = useState(false);
   const [searchResults, setSearchResults] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -30,7 +31,7 @@ export default function Home() {
   const displayCustomers =
     searchResults !== null && Array.isArray(searchResults)
       ? searchResults
-      : filteredCustomers.length > 0
+      : hasActiveFilters
       ? filteredCustomers
       : customers;
 
@@ -56,6 +57,11 @@ export default function Home() {
     setFilteredCustomers(filtered);
     setSearchResults(null); // Clear search when filtering
     setCurrentPage(1);
+  }, []);
+
+  // Handle active filters change
+  const handleActiveFiltersChange = useCallback((hasActive) => {
+    setHasActiveFilters(hasActive);
   }, []);
 
   // Handle search results
@@ -342,6 +348,7 @@ export default function Home() {
               <CustomerFilters
                 customers={customers}
                 onFilteredCustomersChange={handleFilteredCustomersChange}
+                onActiveFiltersChange={handleActiveFiltersChange}
                 totalCount={customers.length}
               />
             </div>

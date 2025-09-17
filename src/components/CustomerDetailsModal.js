@@ -127,6 +127,29 @@ export default function CustomerDetailsModal({ customer, isOpen, onClose }) {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
+                      Project Status
+                    </label>
+                    <span
+                      className={`inline-flex mt-1 px-3 py-1 text-sm font-semibold rounded-full ${
+                        customer.projectStatus === "live"
+                          ? "bg-green-100 text-green-800"
+                          : customer.projectStatus === "developing"
+                          ? "bg-blue-100 text-blue-800"
+                          : customer.projectStatus === "designing"
+                          ? "bg-purple-100 text-purple-800"
+                          : customer.projectStatus === "reviewing"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : customer.projectStatus === "not start"
+                          ? "bg-gray-100 text-gray-800"
+                          : "bg-gray-50 text-gray-500"
+                      }`}
+                    >
+                      {customer.projectStatus || "Not Set"}
+                    </span>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
                       Date Added
                     </label>
                     <p className="mt-1 text-sm text-gray-900 bg-gray-50 p-2 rounded">
@@ -148,10 +171,10 @@ export default function CustomerDetailsModal({ customer, isOpen, onClose }) {
                 </div>
               </div>
 
-              {/* Contact Information */}
+              {/* Contact & Payment Information */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">
-                  Contact Information
+                  Contact & Payment Information
                 </h3>
 
                 <div className="space-y-3">
@@ -187,6 +210,48 @@ export default function CustomerDetailsModal({ customer, isOpen, onClose }) {
                         </span>
                       )}
                     </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Deposit Status
+                    </label>
+                    <span
+                      className={`inline-flex mt-1 px-3 py-1 text-sm font-semibold rounded-full ${
+                        customer.depositStatus === "yes"
+                          ? "bg-green-100 text-green-800"
+                          : customer.depositStatus === "no"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-gray-100 text-gray-800"
+                      }`}
+                    >
+                      {customer.depositStatus === "yes"
+                        ? "Deposit Received"
+                        : customer.depositStatus === "no"
+                        ? "Deposit Pending"
+                        : "Not Set"}
+                    </span>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Project Paid
+                    </label>
+                    <span
+                      className={`inline-flex mt-1 px-3 py-1 text-sm font-semibold rounded-full ${
+                        customer.projectPaid === "yes"
+                          ? "bg-green-100 text-green-800"
+                          : customer.projectPaid === "no"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-gray-100 text-gray-800"
+                      }`}
+                    >
+                      {customer.projectPaid === "yes"
+                        ? "Fully Paid"
+                        : customer.projectPaid === "no"
+                        ? "Payment Pending"
+                        : "Not Set"}
+                    </span>
                   </div>
                 </div>
               </div>

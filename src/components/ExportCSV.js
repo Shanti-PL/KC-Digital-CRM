@@ -54,6 +54,9 @@ export default function ExportCSV({ customers }) {
         "Interested",
         "Package",
         "Package Price",
+        "Project Status",
+        "Deposit Status",
+        "Project Paid",
         "Notes",
         "Call Records",
         "Created Date",
@@ -69,6 +72,21 @@ export default function ExportCSV({ customers }) {
         escapeCSVField(customer.interested ? "Yes" : "No"),
         escapeCSVField(customer.package),
         escapeCSVField(customer.packagePrice),
+        escapeCSVField(customer.projectStatus),
+        escapeCSVField(
+          customer.depositStatus === "yes"
+            ? "Yes"
+            : customer.depositStatus === "no"
+            ? "No"
+            : ""
+        ),
+        escapeCSVField(
+          customer.projectPaid === "yes"
+            ? "Yes"
+            : customer.projectPaid === "no"
+            ? "No"
+            : ""
+        ),
         escapeCSVField(customer.notes),
         escapeCSVField(formatCallRecords(customer.callRecords)),
         escapeCSVField(formatDate(customer.createdAt)),
